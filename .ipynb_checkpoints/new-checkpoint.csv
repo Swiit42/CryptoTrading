@@ -1,0 +1,35 @@
+,Grade,Groupe,Technique (thaï),Description,number
+0,Jaune,Sinlapa Muay,Kat Muay,Garde de base,73
+1,Jaune,Sinlapa Muay,Leng Cheung,Déplacements,38
+2,Jaune,Muay Mat,Mat Trong,Coup de poing direct,37
+3,Jaune,Muay Mat,Mat Wiyeng San,Crochet,16
+4,Jaune,Muay Tei,Tei Chiang,Coup de pied circulaire médian,82
+5,Jaune,Muay Tei,Tei Trong,Coup de pied frontal,59
+6,Jaune,Muay Khao,Khao Trong,Genou direct,99
+7,Jaune,Muay Pam,Tchap Kho,Saisie à la tête,0
+8,Jaune,Muay Bang,Bang Mat,Parade avec les bras,37
+9,Jaune,Muay Bang,Bang Tei,Parade avec les jambes,43
+10,Orange,Sinlapa Muay,Piyen Liem Kat,Changement de garde en déplacement,92
+11,Orange,Muay Mat,Mat Soy,Uppercut,1
+12,Orange,Muay Mat,Mat Wiyeng Yao,Coup de poing circulaire long,13
+13,Orange,Muay Tei,Tip Kang,Coup de pied latéral,87
+14,Orange,Muay Tei,Tei Kan Kro,Coup de pied circulaire haut,68
+15,Orange,Muay Khao,Khao Chiyang,Petit genou circulaire,53
+16,Orange,Muay Khao,Khao Kong,Grand genou circulaire,84
+17,Orange,Muay Pam,Lat Eo,Saisie au corps,58
+18,Orange,Muay Pam,Lat Ken,Saisie des bras,37
+19,Orange,Muay Bang,Bang Khao,Parade avec genou,67
+20,Orange,Muay Bang,Bang Tchak,Esquive avec déplacement d’appui,83
+21,Vert,Sinlapa Muay,Ten,Transfert du poids,46
+22,Vert,Sinlapa Muay,Sueb Tao,Pas chassé,0
+23,Vert,Muay Mat,Mat Klap Lang,Poing retourné,26
+24,Vert,Muay Tei,Tip Thop,Teep circulaire de revers,29
+25,Vert,Muay Tei,Tei Kot,Coup de pied vertical (plante du pied),19
+26,Vert,Muay Tei,Tei Kro,Coup de pied vertical (talon),2
+27,Vert,Muay Khao,Khao Thop,Genou circulaire intérieur,27
+28,Vert,Muay Khao,Khao Tat,Genou circulaire à la cuisse,45
+29,Vert,Muay Sok,Tii Sok,Coude direct,48
+30,Vert,Muay Sok,Sok Tat,Coude circulaire descendant,26
+31,Vert,Muay Pam,Tchap Kha,Saisie des jambes,39
+32,Vert,Muay Bang,Bang Sok,Parade avec le coude,68
+33,Vert,Muay Bang,Yok Toa Lop,Esquive sans déplacement d’appuis,94
