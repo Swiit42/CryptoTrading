@@ -41,6 +41,11 @@ def find_activity():
         ]
         df = df[columns]
 
+        df["last_updated"] = pd.to_datetime(df["last_updated"], utc=True)
+        df["last_updated"] = df["last_updated"].dt.tz_convert("Europe/Paris")
+        df["last_updated"] = df["last_updated"].dt.strftime("%Y-%m-%d %H:%M:%S")
+
+
         df["max_supply"] = df["max_supply"].replace("Unknown", None)
         df["max_supply"] = pd.to_numeric(df["max_supply"], errors="coerce")
 
