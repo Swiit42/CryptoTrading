@@ -3,3 +3,8 @@ pandas
 pyarrow
 azure-storage-blob
 azure-identity
+python-dotenv
+snowflake-connector-python
+snowflake-connector-python[pandas]
+sqlalchemy
+snowflake-sqlalchemy

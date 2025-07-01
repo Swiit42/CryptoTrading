@@ -1,10 +1,14 @@
 import requests
 import pandas as pd
 import os
+import snowflake.connector
 
 from airflow.decorators import dag, task    
 from pendulum import datetime
 from azure.storage.blob import BlobServiceClient
+from pathlib import Path
+from sqlalchemy import create_engine, text
+
 
 header = {"header": os.getenv("COIN_GECKO_KEY")}
 currency = "usd"
@@ -47,14 +51,15 @@ def find_activity():
         return df.to_dict(orient="records")
     
     @task
-    def to_parquet(data, ts=None):
+    def to_file(data, ts=None):
         df = pd.DataFrame(data)
+        df.index.name = "id"
         filename = f"coins_data_{ts}.csv"
         df.to_csv(filename)
         return filename
 
     @task
-    def connect_to_azure_blob(parquet_file, ts=None):
+    def send_coins_azure_blob(parquet_file, ts=None):
         service_client = BlobServiceClient.from_connection_string(azure_connection_string)
         container_name = "crypto-data"
         blob_path = f"history/{ts}/{parquet_file}"
@@ -64,9 +69,37 @@ def find_activity():
         with open(parquet_file, "rb") as data:
             blob_object.upload_blob(data)
 
+    @task
+    def send_coins_snowflake(file):
+        data= pd.read_csv(file)
+        
+        user=os.getenv("SNOWFLAKE_USER")
+        password=os.getenv("SNOWFLAKE_PASSWORD")
+        account=os.getenv("SNOWFLAKE_ACCOUNT")
+        warehouse=os.getenv("SNOWFLAKE_WAREHOUSE")
+        database=os.getenv("SNOWFLAKE_DATABASE")
+        schema=os.getenv("SNOWFLAKE_SCHEMA")
+        role = os.getenv("SNOWFLAKE_ROLE")
+
+        engine_url = f"snowflake://{user}:{password}@{account}/"
+
+        engine = create_engine(
+            engine_url,
+            connect_args={
+                "warehouse": warehouse,
+                "database": database,
+                "schema": schema,
+                "role": role,
+            },
+        )
+
+        data.to_sql("coins_data", con=engine, if_exists="append", schema=schema, index=False)
+
+            
     raw_data = get_coins()
     cleaned_data = clean_and_transform(raw_data)
-    parquet_file = to_parquet(cleaned_data, ts = "{{ ts_nodash }}")
-    connect_to_azure_blob(parquet_file, ts = "{{ ds_nodash }}")
-    
+    file = to_file(cleaned_data, ts = "{{ ts_nodash }}")
+    send_coins_azure_blob(file, ts = "{{ ds_nodash }}")
+    send_coins_snowflake(file)
+
 find_activity()
