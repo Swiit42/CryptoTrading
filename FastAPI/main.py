@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Query
-from services import latest_coins, coin_by_name, top_coins, get_history, top_gainers, top_losers
+from services import latest_coins, coin_by_name, get_history, top_gainers, top_losers
 
 app = FastAPI(title="crypto_api")
 
@@ -11,10 +11,6 @@ def load_all_data():
 def load_by_name(name: str):
     return coin_by_name(name)
 
-@app.get("/top_coins")
-def load_top_coins():
-    return top_coins()
-
 @app.get("/names")
 def get_all_names():
     data = latest_coins()
@@ -22,8 +18,8 @@ def get_all_names():
     return {"names": names}
 
 @app.get("/history")
-def load_history(name: str = Query(...), limit: int = Query(100, ge=1, le=1000)):
-    return get_history(name, limit)
+def load_history(name: str = Query(...), hours: int = Query(100, ge=1, le=1000)):
+    return get_history(name, hours)
 
 @app.get("/top_gainers")
 def load_top_gainers(limit: int = Query(10, ge=1, le=100)):

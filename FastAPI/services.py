@@ -27,47 +27,37 @@ def coin_by_name(name: str):
     params = (name,)
     return fetch_query(query , params)
 
-def top_coins(limit: int = 10):
-    query = f"""SELECT * FROM COINS_DATA
-        WHERE TO_TIMESTAMP_NTZ(LAST_UPDATED) = (
-        SELECT MAX(TO_TIMESTAMP_NTZ(LAST_UPDATED)) FROM COINS_DATA
-        )
-        ORDER BY price_change_percentage_24h DESC
-        LIMIT (%s)""", 
-    params = (limit,)
-    return fetch_query(query, params)
-
-def get_history(name: str, limit: int = 100):
-    query = """SELECT * FROM COINS_DATA
-            WHERE LOWER(NAME) = LOWER(%s)
-            ORDER BY TO_TIMESTAMP_NTZ(LAST_UPDATED) DESC
-            LIMIT %s"""
-    params = (name, limit)
-    return fetch_query(query, params)
+def get_history(name: str, hours: int = 24):
+    query = f"""
+        SELECT *
+        FROM COINS_DATA
+        WHERE name = %s
+          AND LAST_UPDATED >= CURRENT_TIMESTAMP - INTERVAL '{hours} HOURS'
+        ORDER BY LAST_UPDATED
+    """
+    return fetch_query(query, (name,))
 
 def top_gainers(limit: int = 10):
-    sql = """
-        SELECT * FROM COINS_DATA
-        WHERE TO_TIMESTAMP_NTZ(LAST_UPDATED) = (
-            SELECT MAX(TO_TIMESTAMP_NTZ(LAST_UPDATED)) FROM COINS_DATA
-        )
+    query = """
+        SELECT *
+        FROM COINS_DATA
+        QUALIFY ROW_NUMBER() OVER (PARTITION BY name ORDER BY price_change_percentage_24h DESC) = 1
         ORDER BY price_change_percentage_24h DESC
         LIMIT %s
     """
     params = (limit,)
-    return fetch_query(sql, params)
+    return fetch_query(query, params)
 
 def top_losers(limit: int = 10):
-    sql = """
-        SELECT * FROM COINS_DATA
-        WHERE TO_TIMESTAMP_NTZ(LAST_UPDATED) = (
-            SELECT MAX(TO_TIMESTAMP_NTZ(LAST_UPDATED)) FROM COINS_DATA
-        )
+    query = """
+        SELECT *
+        FROM COINS_DATA
+        QUALIFY ROW_NUMBER() OVER (PARTITION BY name ORDER BY price_change_percentage_24h ASC) = 1
         ORDER BY price_change_percentage_24h ASC
         LIMIT %s
     """
     params = (limit,)
-    return fetch_query(sql, params)
+    return fetch_query(query, params)
 
     
 def map_rows_to_dicts(rows):
